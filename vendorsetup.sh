@@ -1,1 +1,1 @@
-add_lunch_combo omni_KY41C-eng
+add_lunch_combo twrp_KY41C-eng
