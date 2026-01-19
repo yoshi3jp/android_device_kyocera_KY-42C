@@ -1,8 +1,10 @@
-on init
+on eaely-init
     setprop ro.hardware.keystore_deprecated=true
     setprop ro.hardware.keystore2=none
     setprop sys.usb.configfs 1
     setprop sys.usb.ffs.aio_compat 1
+    
+on init
     start health-hal-2-0
 
 on fs && property:ro.debuggable=0
