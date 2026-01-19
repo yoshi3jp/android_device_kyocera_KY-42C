@@ -1,4 +1,4 @@
-on eaely-init
+on early-init
     setprop ro.hardware.keystore_deprecated=true
     setprop ro.hardware.keystore2=none
     
