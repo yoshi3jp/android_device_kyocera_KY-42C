@@ -19,8 +19,6 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.keymaster.version=3.0 \
-    ro.hardware.kmsetkey=trustonic \ 
-    ro.hardware.gatekeeper=trustonic \ 
+    ro.hardware.kmsetkey=trustonic \
+    ro.hardware.gatekeeper=trustonic \
     ro.vendor.mtk_trustonic_tee_support=1
-
-
