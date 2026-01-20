@@ -14,8 +14,7 @@ PRODUCT_TARGET_VNDK_VERSION := 29
 
 # Add only Keymaster 3
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-impl \
-    android.hardware.keymaster@3.0-service
+    android.hardware.keymaster@3.0-service.trustonic
 
 PRODUCT_VENDOR_PROPERTIES += \
     ro.vendor.keymaster.version=3.0 \
