@@ -31,4 +31,22 @@ PRODUCT_PACKAGES_REMOVE := \
     vendor.qti.hardware.vibrator.impl \
     libqtivibratoreffect
 
+TARGET_RECOVERY_DEVICE_MODULES := $(filter-out \
+    vendor.qti.hardware.vibrator.service \
+    vendor.qti.hardware.vibrator.impl \
+    libqtivibratoreffect, \
+    $(TARGET_RECOVERY_DEVICE_MODULES))
+
+RECOVERY_LIBRARY_SOURCE_FILES := $(filter-out \
+    %/hw/vendor.qti.hardware.vibrator.service \
+    %/vendor.qti.hardware.vibrator.impl.so \
+    %/libqtivibratoreffect.so, \
+    $(RECOVERY_LIBRARY_SOURCE_FILES))
+
+PRODUCT_PACKAGES := $(filter-out \
+    vendor.qti.hardware.vibrator.service \
+    vendor.qti.hardware.vibrator.impl \
+    libqtivibratoreffect, \
+    $(PRODUCT_PACKAGES))
+
 BUILD_FINGERPRINT := KYOCERA/KY-41C/KY-41C:10/1.060DE.0176.a/1.060DE.0176.a:user/release-keys
