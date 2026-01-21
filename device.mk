@@ -6,12 +6,6 @@ PRODUCT_PACKAGES += \
     android.hardware.health@2.0-impl.recovery \
     android.hardware.health@2.0-service
 
-# API levels
-PRODUCT_SHIPPING_API_LEVEL := 29
-
-# VNDK
-PRODUCT_TARGET_VNDK_VERSION := 29
-
 # Add only Keymaster 3
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-service.trustonic
