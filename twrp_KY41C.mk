@@ -49,4 +49,6 @@ PRODUCT_PACKAGES := $(filter-out \
     libqtivibratoreffect, \
     $(PRODUCT_PACKAGES))
 
+PRODUCT_SOONG_NAMESPACES := $(filter-out vendor/qcom% hardware/qcom%,$(PRODUCT_SOONG_NAMESPACES))
+
 BUILD_FINGERPRINT := KYOCERA/KY-41C/KY-41C:10/1.060DE.0176.a/1.060DE.0176.a:user/release-keys
