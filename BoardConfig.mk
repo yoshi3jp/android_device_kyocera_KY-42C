@@ -130,7 +130,8 @@ TW_INCLUDE_LIBRESETPROP := true
 # vintf
 PRODUCT_FULL_TREBLE := true
 PRODUCT_ENFORCE_VINTF_MANIFEST := true
-BOARD_VNDK_VERSION := 29
+# Interferes with the build system. Turned off for now
+#BOARD_VNDK_VERSION := 29
 
 # Logging
 TARGET_USES_LOGD := true
