@@ -1,3 +1,4 @@
+![TWRP](https://raw.githubusercontent.com/TeamWin/twrpme/refs/heads/master/favicon.ico "for TWRP")
 # Android device tree for KYOCERA KY-41C (KY-41C)
 
 ## Contributors
