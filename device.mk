@@ -12,6 +12,10 @@ PRODUCT_SHIPPING_API_LEVEL := 29
 # VNDK
 PRODUCT_TARGET_VNDK_VERSION := 29
 
+# LD CONFIG FOR SP HAL
+PRODUCT_PACKAGES += \
+    ld.config.txt
+
 # Add only Keymaster 3
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-service.trustonic
