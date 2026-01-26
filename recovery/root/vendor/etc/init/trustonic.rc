@@ -17,7 +17,7 @@ service mobicore /vendor/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry 
 	-r /vendor/app/mcRegistry/9073f03a9618383bb1856eb3f990babd.drbin
     user root
     group root
-	setenv LD_LIBRARY_PATH /vendor/lib:/system/lib:/system/lib:/sbin
+	setenv LD_LIBRARY_PATH /vendor/lib:/system/lib:/sbin
     class core
     priority -20
 	seclabel u:r:recovery:s0
