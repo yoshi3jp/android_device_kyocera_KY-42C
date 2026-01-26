@@ -11,19 +11,6 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 #
-```
-## Finding decrypt functions...
-In libkeymaster_portable.so implemented as:
-```
-keymaster::EcKeyFactory::CreateEmptyKey(keymaster::AuthorizationSet&&, keymaster::AuthorizationSet&&, keymaster::UniquePtr<keymaster::AsymmetricKey, keymaster::DefaultDelete<keymaster::AsymmetricKey>>*) const
-```
-libsoftkeymasterdevice.so wants:
-```
-keymaster::EcKeyFactory::CreateEmptyKey(keymaster::AuthorizationSet&&, keymaster::AuthorizationSet&&, std::__1::unique_ptr<keymaster::AsymmetricKey, std::__1::default_delete<keymaster::AsymmetricKey>>*) const
-```
-A classic implementation back in 2015 used to be in ec_key.cpp:
-```
-keymaster_error_t EcKeyFactory::CreateEmptyKey(const AuthorizationSet& hw_enforced,
-                                               const AuthorizationSet& sw_enforced,
-                                               UniquePtr<AsymmetricKey>* key)
-```
+``` 
+## Decryption library trick
+There was an issue where libkeymaster_portable.so had an older nearly yet not quite compatible implementation of EcKeyFactory::CreateEmptyKey, causing libsoftkeymasterdevice.so to fail. As a fix, a compatibility layer of shared library was added as a potentially viable option for recovery-only use case. If you adopt this tree for different kind of project, it may not work or perform well. On the otherhand this trick can potentially work on other device so long as the objective is the same. (TWRP 12.1 for Android 10 MTK-ARMv7-neon-Trustonic device)
