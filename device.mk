@@ -12,11 +12,12 @@ PRODUCT_SHIPPING_API_LEVEL := 29
 # VNDK
 PRODUCT_TARGET_VNDK_VERSION := 29
 
-# LD CONFIG FOR SP HAL : apparently not a good idea.
-#PRODUCT_PACKAGES += \
-#    ld.config.txt
+# Build lshal : This is to debug AIDL/HIDL
+PRODUCT_PACKAGES += lshal
+# Put it into recovery ramdisk
+TARGET_RECOVERY_DEVICE_MODULES += lshal
 
-# Add only Keymaster 3
+# Add (only?) Keymaster 3
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-service.trustonic
 
