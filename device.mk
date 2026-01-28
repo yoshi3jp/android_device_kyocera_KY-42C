@@ -14,6 +14,8 @@ PRODUCT_TARGET_VNDK_VERSION := 29
 
 # Build lshal : This is to debug AIDL/HIDL
 PRODUCT_PACKAGES += lshal
+# Put it into recovery ramdisk
+TARGET_RECOVERY_DEVICE_MODULES += lshal
 
 # Add (only?) Keymaster 3
 PRODUCT_PACKAGES += \
