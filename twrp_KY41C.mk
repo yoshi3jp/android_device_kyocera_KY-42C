@@ -9,20 +9,20 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit some common Omni stuff.
-$(call inherit-product, vendor/omni/config/common.mk)
+$(call inherit-product, vendor/twrp/config/common.mk)
 
-# Inherit from KY-42C device
-$(call inherit-product, device/kyocera/KY-42C/device.mk)
+# Inherit from a13 device
+$(call inherit-product, device/kyocera/KY41C/device.mk)
 
-PRODUCT_DEVICE := KY-42C
-PRODUCT_NAME := omni_KY-42C
+PRODUCT_DEVICE := KY41C
+PRODUCT_NAME := twrp_KY41C
 PRODUCT_BRAND := KYOCERA
-PRODUCT_MODEL := KY-42C
+PRODUCT_MODEL := KY41C
 PRODUCT_MANUFACTURER := kyocera
 
 PRODUCT_GMS_CLIENTID_BASE := android-kyocera
 
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    PRIVATE_BUILD_DESC="KY-42C-user 10 1.120GC.0153.a 1.120GC.0153.a release-keys"
+    PRIVATE_BUILD_DESC="KY-41C-user 10 1.060DE.0176.a 1.060DE.0176.a release-keys"
 
-BUILD_FINGERPRINT := KYOCERA/KY-42C/KY-42C:10/1.120GC.0153.a/1.120GC.0153.a:user/release-keys
+BUILD_FINGERPRINT := KYOCERA/KY-41C/KY-41C:10/1.060DE.0176.a/1.060DE.0176.a:user/release-keys

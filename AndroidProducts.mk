@@ -6,9 +6,7 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/omni_KY-42C.mk
+    $(LOCAL_DIR)/twrp_KY41C.mk
 
 COMMON_LUNCH_CHOICES := \
-    omni_KY-42C-user \
-    omni_KY-42C-userdebug \
-    omni_KY-42C-eng
+    twrp_KY41C-eng
