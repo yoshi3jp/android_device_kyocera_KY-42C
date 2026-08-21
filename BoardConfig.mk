@@ -113,7 +113,10 @@ TW_DEFAULT_BRIGHTNESS := 127
 TW_INCLUDE_NTFS_3G := true
 TW_EXCLUDE_SUPERSU := true
 TW_USE_NEW_MINADBD := true
-TW_INPUT_BLACKLIST := "hbtp_vm"
+# ky42c-keyptrd reads matrix_keypad directly and re-emits a composite uinput
+# mouse/keyboard. Blacklist only that live source to avoid duplicate TWRP input.
+# The stock keyptr stays disabled (onoff=0) and emits no events.
+TW_INPUT_BLACKLIST := "matrix_keypad"
 TW_EXCLUDE_DEFAULT_USB_INIT := true
 TW_DEVICE_VERSION := SavedByLight & Yoshi3jp
 TW_INCLUDE_RESETPROP := true

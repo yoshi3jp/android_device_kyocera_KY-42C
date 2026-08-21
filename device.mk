@@ -7,6 +7,9 @@
 
 LOCAL_PATH := device/kyocera/KY-42C
 
+# Make Soong modules declared in this device namespace visible to Make.
+PRODUCT_SOONG_NAMESPACES += $(LOCAL_PATH)
+
 # Health
 PRODUCT_PACKAGES += \
     android.hardware.health@2.0-impl \
@@ -22,6 +25,11 @@ PRODUCT_TARGET_VNDK_VERSION := 29
 # Useful during bring-up.
 PRODUCT_PACKAGES += lshal
 TARGET_RECOVERY_DEVICE_MODULES += lshal
+
+# Recovery-only keypad to virtual mouse/keyboard bridge. The stock matrix
+# keypad remains the hardware source; TWRP consumes the uinput device emitted
+# by ky42c-keyptrd instead of consuming matrix_keypad directly.
+TARGET_RECOVERY_DEVICE_MODULES += ky42c-keyptrd
 
 # The KY-41C merge imported a recovery-side Trustonic/Keymaster stack here.
 # KY-42C does advertise Keymaster 3.0, Gatekeeper 1.0, and Trustonic TEE,

@@ -7,3 +7,14 @@
 
 soong_namespace {
 }
+
+cc_binary {
+    name: "ky42c-keyptrd",
+    srcs: ["ky42c-keyptrd.c"],
+    recovery: true,
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+    ],
+}

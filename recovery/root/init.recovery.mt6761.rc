@@ -4,9 +4,16 @@ on early-init
     mkdir /mnt/vendor
     mkdir /mnt/vendor/persist 0771 system system
     mkdir /metadata 0771 system system
-    
+
+service ky42c-keyptrd /system/bin/ky42c-keyptrd
+    class core
+    user root
+    group root input uhid
+    seclabel u:r:recovery:s0
+
 on init
     start health-hal-2-0
+    start ky42c-keyptrd
     setprop sys.usb.configfs 1
     setprop sys.usb.ffs.aio_compat 1
 
