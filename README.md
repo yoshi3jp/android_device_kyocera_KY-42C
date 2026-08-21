@@ -1,16 +1,19 @@
 ![TWRP](https://raw.githubusercontent.com/TeamWin/twrpme/refs/heads/master/favicon.ico "for TWRP")
-# Android device tree for KYOCERA KY-41C (KY-41C)
+# Android device tree for KYOCERA KY-42C
 
-## Contributors
- -	[Yoshinobu Date](https://github.com/yoshi3jp) 
+This branch is the KY-42C TWRP 12.1 re-bring-up tree. It starts from merge commit
+`8c3a3eb0cc9c799ddfb88b00c7fd43d58ba11354` and audits KY-41C material before
+re-enabling device-specific features.
 
-```
-#
-# Copyright (C) 2026 The Android Open Source Project
-# Copyright (C) 2026 SebaUbuntu's TWRP device tree generator
-#
-# SPDX-License-Identifier: Apache-2.0
-#
-``` 
-## Decryption library trick
-There was an issue where libkeymaster_portable.so had an older nearly yet not quite compatible implementation of EcKeyFactory::CreateEmptyKey, causing libsoftkeymasterdevice.so to fail. As a fix, a compatibility layer of shared library was added as a potentially viable option for recovery-only use case. If you adopt this tree for different kind of project, it may not work or perform well. On the otherhand this trick can potentially work on other device so long as the objective is the same. (TWRP 12.1 for Android 10 MTK-ARMv7-neon-Trustonic device)
+The KY-42C prebuilt kernel, DTB and DTBO from the original KY-42C tree are kept.
+The first objective is a stable, non-destructive recovery with display, ADB,
+reboot-to-system, storage discovery and raw keypad input.
+
+The KY-41C merge also brought in a Trustonic/Keymaster decryption stack. KY-42C
+uses Trustonic TEE, Keymaster 3.0 and Gatekeeper 1.0, but those imported binaries
+and their recovery dependencies are not assumed to be interchangeable. FBE
+support remains disabled until the KY-42C stack is validated directly.
+
+The `para` partition is intentionally not exposed as TWRP `/misc` during initial
+bring-up. KY-42C boot-mode state can persist there, so recovery must not modify it
+until its semantics are understood and a verified restore path exists.

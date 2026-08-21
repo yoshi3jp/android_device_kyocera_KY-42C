@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/kyocera/KY41C
+DEVICE_PATH := device/kyocera/KY-42C
 
 # For building with minimal manifest
 ALLOW_MISSING_DEPENDENCIES := true
@@ -18,7 +18,7 @@ TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := generic
 TARGET_CPU_VARIANT_RUNTIME := cortex-a53
 
-#When PRODUCT_SHIPPING_API_LEVEL >= 28, TARGET_USES_64_BIT_BINDER must be true.
+# PRODUCT_SHIPPING_API_LEVEL >= 28 requires a 64-bit binder ABI.
 TARGET_USES_64_BIT_BINDER := true
 
 # APEX
@@ -33,13 +33,13 @@ TARGET_SCREEN_DENSITY := 240
 TARGET_SCREEN_WIDTH := 480
 TARGET_SCREEN_HEIGHT := 854
 
-# Kernel - prebuilt
+# Kernel - known KY-42C prebuilts retained from the pre-merge tree.
 TARGET_FORCE_PREBUILT_KERNEL := true
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
 TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
 
-# Kernel
+# Kernel image geometry
 BOARD_BOOTIMG_HEADER_VERSION := 2
 BOARD_KERNEL_BASE := 0x40000000
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32S1,32S1 buildvariant=eng
@@ -53,7 +53,7 @@ BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
 
 # Partitions
-BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
+BOARD_FLASH_BLOCK_SIZE := 131072 # BOARD_KERNEL_PAGESIZE * 64
 BOARD_BOOTIMAGE_PARTITION_SIZE := 33554432
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 33554432
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 870318080
@@ -62,10 +62,12 @@ BOARD_SYSTEMIMAGE_PARTITION_TYPE := ext4
 BOARD_USERDATAIMAGE_FILE_SYSTEM_TYPE := f2fs
 BOARD_VENDORIMAGE_FILE_SYSTEM_TYPE := ext4
 TARGET_COPY_OUT_VENDOR := vendor
-BOARD_SUPER_PARTITION_SIZE := 2044723200 # 0x79E00000 TODO: double check 2GiB
-BOARD_SUPER_PARTITION_GROUPS := kyocera_dynamic_partitions
-BOARD_KYOCERA_DYNAMIC_PARTITIONS_PARTITION_LIST := system vendor product odm
-BOARD_KYOCERA_DYNAMIC_PARTITIONS_SIZE := 9122611200 # TODO: Fix hardcoded value
+
+# Verified KY-42C super geometry. Stock metadata names the group "main".
+BOARD_SUPER_PARTITION_SIZE := 2044723200
+BOARD_SUPER_PARTITION_GROUPS := main
+BOARD_MAIN_PARTITION_LIST := system vendor product odm
+BOARD_MAIN_SIZE := 2042626048
 
 # Platform
 TARGET_BOARD_PLATFORM := mt6761
@@ -78,35 +80,25 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
 
-# Verified Boot
+# Verified Boot. Restore the KY-42C pre-merge RSA-4096 recovery signing setup;
+# the KY-41C merge changed this to RSA-2048 without KY-42C evidence.
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
-BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
-BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA2048
+BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
 
-# Hack: prevent anti rollback
+# Recovery build compatibility values.
 PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH := 2099-12-31
 PLATFORM_VERSION := 10.0.0
-#PLATFORM_SDK_VERSION := 29
 
-# Crypt/Keymaster/Keystore
-# TW_INCLUDE_CRYPTO invokes keystore2, keystore2.rc, plat_keystore2_key_contexts etc. Exclude?
-TW_INCLUDE_CRYPTO := true
-TW_INCLUDE_FBE := true
-TW_INCLUDE_FBE_METADATA_DECRYPT := true
-TW_USE_FSCRYPT_POLICY := 1
-TW_PREPARE_DATA_MEDIA_EARLY := true
-# TARGET_USES_KEYMASTER := true
-# TARGET_USES_KEYMINT := false
-# BOARD_USES_KEYMASTER := true
-# BOARD_USES_KEYMASTER_3 := true
-# BOARD_USES_LEGACY_KEYSTORE := true
-BOARD_USES_KEYSTORE2 := true
-# TARGET_RECOVERY_EXCLUDE_KEYMINT := true
-# TARGET_RECOVERY_KEYMASTER_VERSION := 3.0
+# Decryption is deliberately disabled for the first KY-42C re-bring-up.
+# The merge imported a KY-41C-specific Trustonic/Keymaster userspace stack.
+# KY-42C uses Trustonic and Keymaster 3.0 too, but its exact recovery-side
+# binaries, registry, device nodes and policy dependencies must be validated
+# before FBE support is enabled again.
 
 # TWRP Configuration
 TW_THEME := portrait_hdpi
@@ -128,11 +120,9 @@ TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LIBRESETPROP := true
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
-# vintf
+# VINTF / Treble
 PRODUCT_FULL_TREBLE := true
 PRODUCT_ENFORCE_VINTF_MANIFEST := true
-# Interferes with the build system. Turned off for now
-#BOARD_VNDK_VERSION := 29
 
 # Logging
 TARGET_USES_LOGD := true

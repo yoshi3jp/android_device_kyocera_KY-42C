@@ -6,7 +6,7 @@
 #
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/twrp_KY41C.mk
+    $(LOCAL_DIR)/twrp_KY42C.mk
 
 COMMON_LUNCH_CHOICES := \
-    twrp_KY41C-eng
+    twrp_KY42C-eng

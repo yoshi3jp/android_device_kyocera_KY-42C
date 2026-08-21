@@ -1,4 +1,11 @@
-LOCAL_PATH := device/kyocera/KY41C
+#
+# Copyright (C) 2026 The Android Open Source Project
+# Copyright (C) 2026 SebaUbuntu's TWRP device tree generator
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+LOCAL_PATH := device/kyocera/KY-42C
 
 # Health
 PRODUCT_PACKAGES += \
@@ -12,17 +19,11 @@ PRODUCT_SHIPPING_API_LEVEL := 29
 # VNDK
 PRODUCT_TARGET_VNDK_VERSION := 29
 
-# Build lshal : This is to debug AIDL/HIDL
+# Useful during bring-up.
 PRODUCT_PACKAGES += lshal
-# Put it into recovery ramdisk
 TARGET_RECOVERY_DEVICE_MODULES += lshal
 
-# Add (only?) Keymaster 3
-PRODUCT_PACKAGES += \
-    android.hardware.keymaster@3.0-service.trustonic
-
-PRODUCT_VENDOR_PROPERTIES += \
-    ro.vendor.keymaster.version=3.0 \
-    ro.hardware.kmsetkey=trustonic \
-    ro.hardware.gatekeeper=trustonic \
-    ro.vendor.mtk_trustonic_tee_support=1
+# The KY-41C merge imported a recovery-side Trustonic/Keymaster stack here.
+# KY-42C does advertise Keymaster 3.0, Gatekeeper 1.0, and Trustonic TEE,
+# but recovery decryption will be re-enabled only after the KY-42C vendor
+# binaries and runtime dependencies have been validated independently.
