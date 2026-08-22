@@ -1,4 +1,4 @@
-on init
+on property:init.svc.mobicore=running
     start vendor.gatekeeper-1-0
 
 service vendor.gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service

@@ -100,10 +100,8 @@ PLATFORM_VERSION := 10.0.0
 # Userdata is mounted directly as F2FS; there is no metadata-encryption
 # dm layer, no keydirectory=, and no wrapped-key fstab flag.
 TW_INCLUDE_CRYPTO := true
-TW_INCLUDE_FBE := true
 TW_USE_FSCRYPT_POLICY := 1
 TW_PREPARE_DATA_MEDIA_EARLY := true
-BOARD_USES_KEYSTORE2 := true
 
 # TWRP Configuration
 TW_THEME := portrait_hdpi
