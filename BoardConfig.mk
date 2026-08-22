@@ -94,11 +94,16 @@ PLATFORM_SECURITY_PATCH := 2099-12-31
 VENDOR_SECURITY_PATCH := 2099-12-31
 PLATFORM_VERSION := 10.0.0
 
-# Decryption is deliberately disabled for the first KY-42C re-bring-up.
-# The merge imported a KY-41C-specific Trustonic/Keymaster userspace stack.
-# KY-42C uses Trustonic and Keymaster 3.0 too, but its exact recovery-side
-# binaries, registry, device nodes and policy dependencies must be validated
-# before FBE support is enabled again.
+# File-based encryption.
+#
+# Stock KY-42C uses fscrypt FBE with AES-256-XTS contents encryption.
+# Userdata is mounted directly as F2FS; there is no metadata-encryption
+# dm layer, no keydirectory=, and no wrapped-key fstab flag.
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_FBE := true
+TW_USE_FSCRYPT_POLICY := 1
+TW_PREPARE_DATA_MEDIA_EARLY := true
+BOARD_USES_KEYSTORE2 := true
 
 # TWRP Configuration
 TW_THEME := portrait_hdpi
