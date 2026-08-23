@@ -1,0 +1,25 @@
+# KY-42C recovery fstab: conservative bring-up baseline.
+# Do not expose para as /misc here; boot-mode state may persist in para.
+
+/system                        ext4     system                                                   flags=display=system;logical
+/vendor                        ext4     vendor                                                   flags=display=vendor;logical
+/product                       ext4     product                                                  flags=display=product;logical
+/odm                           ext4     odm                                                      flags=display=odm;logical
+
+# Stock Android mounts md_udc as /metadata on KY-42C. The GPT partition named
+# metadata is a distinct partition and must not be substituted here.
+/metadata                      ext4     /dev/block/platform/bootdevice/by-name/md_udc            flags=display=metadata
+/data                          f2fs     /dev/block/platform/bootdevice/by-name/userdata          flags=display=data
+/cache                         ext4     /dev/block/platform/bootdevice/by-name/cache             flags=display=cache
+
+# Deliberately limited raw-image set for initial testing.
+/recovery                      emmc     /dev/block/platform/bootdevice/by-name/recovery          flags=display=recovery
+/boot                          emmc     /dev/block/platform/bootdevice/by-name/boot              flags=display=boot
+/dtbo                          emmc     /dev/block/platform/bootdevice/by-name/dtbo              flags=display=dtbo
+/vbmeta                        emmc     /dev/block/platform/bootdevice/by-name/vbmeta            flags=display=vbmeta
+/vbmeta_system                 emmc     /dev/block/platform/bootdevice/by-name/vbmeta_system     flags=display=vbmeta_system
+/vbmeta_vendor                 emmc     /dev/block/platform/bootdevice/by-name/vbmeta_vendor     flags=display=vbmeta_vendor
+
+# External media discovery inherited from the original generated KY-42C tree.
+auto                           auto     /devices/platform/externdevice*                          flags=display=auto
+auto                           vfat     /devices/platform/mt_usb*                                flags=display=auto
