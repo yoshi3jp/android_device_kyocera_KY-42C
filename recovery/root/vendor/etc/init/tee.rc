@@ -3,6 +3,11 @@ on init
     mkdir /mnt/vendor/persist 0771 system system
 
 on post-fs
+    # Mount persistent Trustonic state before starting mobicore
+    wait /dev/block/platform/bootdevice/by-name/persist
+    mount ext4 /dev/block/platform/bootdevice/by-name/persist /mnt/vendor/persist \
+        noatime nosuid nodev options=noauto_da_alloc,commit=1,nodelalloc
+
     chown system system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
 
@@ -14,6 +19,8 @@ on post-fs
 
     write /proc/bootprof "MOBICORE: Starting mcDriverDaemon"
     start mobicore
+    start vendor.keymaster-3-0-trustonic
+    start vendor.gatekeeper-1-0
 
 on post-fs-data
     # Create /data/vendor/key_provisioning dir and get proper encryption policy installed
