@@ -78,7 +78,7 @@ BOARD_HAS_MTK_HARDWARE := true
 BOARD_INCLUDE_RECOVERY_DTBO := true
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
-TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery.fstab
+TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/recovery/root/etc/recovery.fstab
 
 # Verified Boot. Restore the KY-42C pre-merge RSA-4096 recovery signing setup;
 # the KY-41C merge changed this to RSA-2048 without KY-42C evidence.
