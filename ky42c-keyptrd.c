@@ -3,8 +3,12 @@
  *
  * Converts the stock matrix_keypad input device into a uinput composite
  * pointer/touch/keyboard for TWRP. Direction keys become relative mouse
- * motion, KEY_ENTER emits a synthetic touchscreen tap at the current cursor
- * position, and all other matrix keys are passed through.
+ * motion, KEY_ENTER holds a synthetic touchscreen contact at the current
+ * cursor position for as long as CENTER is held, and all other matrix keys
+ * are passed through.
+ *
+ * A short CENTER press remains an ordinary tap. Holding CENTER while moving
+ * the D-pad produces a real TWRP drag/swipe gesture.
  *
  * SPDX-License-Identifier: Apache-2.0
  */
@@ -301,25 +305,39 @@ static int emit_motion(int ufd, const bool held[KEY_MAX + 1], int *cursor_x, int
     return 0;
 }
 
-static int emit_tap(int ufd, int x, int y)
+static int emit_touch_down(int ufd, int x, int y)
 {
     /*
-     * Feed TWRP the same event class its normal touchscreen path consumes.
-     * In minuitwrp/events.cpp, ABS_X/ABS_Y followed by SYN_REPORT becomes an
-     * internal EV_ABS code=1 touch start. ABS_MT_TOUCH_MAJOR=0 followed by
-     * SYN_REPORT becomes the corresponding EV_ABS code=0 touch release.
+     * Begin a synthetic touchscreen contact at the current mouse cursor.
      *
-     * No BTN_TOUCH event is emitted because TWRP forwards EV_KEY directly to
-     * its hardware-key path; a BTN_TOUCH key event would interfere with the
-     * touch-state machine rather than helping it.
+     * Keep ABS_MT_TOUCH_MAJOR asserted until physical CENTER is released.
+     * While the contact remains active, the existing REL_X/REL_Y stream lets
+     * TWRP turn D-pad pointer motion into TOUCH_DRAG events.
      */
     if (emit_event(ufd, EV_ABS, ABS_X, x) < 0 ||
         emit_event(ufd, EV_ABS, ABS_Y, y) < 0 ||
         emit_event(ufd, EV_ABS, ABS_MT_TOUCH_MAJOR, 1) < 0 ||
+        emit_sync(ufd) < 0)
+        return -1;
+
+    return 0;
+}
+
+static int emit_touch_up(int ufd, int x, int y)
+{
+    /*
+     * D-pad movement is emitted as EV_REL, while TWRP's touchscreen release
+     * path remembers its most recent absolute touch position. Re-submit the
+     * current cursor coordinates before lifting the synthetic finger so the
+     * TOUCH_RELEASE occurs at the end of the drag rather than at its origin.
+     */
+    if (emit_event(ufd, EV_ABS, ABS_X, x) < 0 ||
+        emit_event(ufd, EV_ABS, ABS_Y, y) < 0 ||
         emit_sync(ufd) < 0 ||
         emit_event(ufd, EV_ABS, ABS_MT_TOUCH_MAJOR, 0) < 0 ||
         emit_sync(ufd) < 0)
         return -1;
+
     return 0;
 }
 
@@ -413,14 +431,25 @@ static int run_bridge(int source_fd, int ufd)
                 bool down = ev.value != 0;
 
                 /*
-                 * Emit one complete tap on the physical CENTER key-down and
-                 * ignore the eventual key-up. This intentionally avoids
-                 * relying on TWRP's separate mouse-button state machine.
+                 * Physical CENTER owns the lifetime of the synthetic touch.
+                 *
+                 * CENTER down:
+                 *     TOUCH_START at the current cursor.
+                 *
+                 * CENTER held + D-pad:
+                 *     existing REL_X/REL_Y motion becomes TOUCH_DRAG in TWRP.
+                 *
+                 * CENTER up:
+                 *     TOUCH_RELEASE at the final cursor position.
                  */
                 if (down && !enter_held) {
-                    if (emit_tap(ufd, cursor_x, cursor_y) < 0)
+                    if (emit_touch_down(ufd, cursor_x, cursor_y) < 0)
+                        return -1;
+                } else if (!down && enter_held) {
+                    if (emit_touch_up(ufd, cursor_x, cursor_y) < 0)
                         return -1;
                 }
+
                 enter_held = down;
                 continue;
             }
