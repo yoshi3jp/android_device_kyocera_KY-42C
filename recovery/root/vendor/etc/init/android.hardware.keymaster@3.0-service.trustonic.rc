@@ -1,4 +1,4 @@
-on init
+on property:init.svc.mobicore=running
     start vendor.keymaster-3-0-trustonic
 
 service vendor.keymaster-3-0-trustonic /vendor/bin/hw/android.hardware.keymaster@3.0-service.trustonic

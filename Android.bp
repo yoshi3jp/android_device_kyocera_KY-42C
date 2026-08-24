@@ -18,3 +18,14 @@ cc_binary {
         "-Werror",
     ],
 }
+
+cc_binary {
+    name: "ky42c-fscrypt-keyring",
+    srcs: ["ky42c-fscrypt-keyring.c"],
+    recovery: true,
+    cflags: [
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+    ],
+}
