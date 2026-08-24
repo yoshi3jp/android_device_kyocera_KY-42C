@@ -104,7 +104,7 @@ TW_USE_FSCRYPT_POLICY := 1
 TW_PREPARE_DATA_MEDIA_EARLY := true
 
 # TWRP Configuration
-TW_THEME := portrait_hdpi
+TW_THEME := portrait_mdpi
 TW_EXTRA_LANGUAGES := true
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_USE_TOOLBOX := true
