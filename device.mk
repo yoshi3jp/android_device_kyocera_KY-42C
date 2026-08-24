@@ -31,6 +31,11 @@ TARGET_RECOVERY_DEVICE_MODULES += lshal
 # by ky42c-keyptrd instead of consuming matrix_keypad directly.
 TARGET_RECOVERY_DEVICE_MODULES += ky42c-keyptrd
 
+# Android 10-era fscrypt uses the legacy session keyring interface.
+# TWRP 12.1 no longer creates the "fscrypt" child keyring during init,
+# so create it before recovery begins FBE initialization.
+TARGET_RECOVERY_DEVICE_MODULES += ky42c-fscrypt-keyring
+
 # The KY-41C merge imported a recovery-side Trustonic/Keymaster stack here.
 # KY-42C does advertise Keymaster 3.0, Gatekeeper 1.0, and Trustonic TEE,
 # but recovery decryption will be re-enabled only after the KY-42C vendor

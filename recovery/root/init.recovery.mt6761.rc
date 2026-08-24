@@ -9,7 +9,17 @@ service ky42c-keyptrd /system/bin/ky42c-keyptrd
     group root input uhid
     seclabel u:r:recovery:s0
 
+service ky42c-fscrypt-keyring /system/bin/ky42c-fscrypt-keyring
+    class core
+    user root
+    group root
+    disabled
+    oneshot
+    seclabel u:r:recovery:s0
+
 on init
+    exec_start ky42c-fscrypt-keyring
+
     export MC_AUTH_TOKEN_PATH /mnt/vendor/persist
     start health-hal-2-0
     start ky42c-keyptrd
