@@ -11,6 +11,10 @@ DEVICE_PATH := device/kyocera/KY-42C
 ALLOW_MISSING_DEPENDENCIES := true
 
 # Architecture
+#
+# A1 deliberately keeps the TWRP userspace 32-bit.  Only the prebuilt Linux
+# kernel is AArch64; CONFIG_COMPAT in that kernel provides the 32-bit userspace
+# execution environment.
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_ABI := armeabi-v7a
@@ -33,24 +37,35 @@ TARGET_SCREEN_DENSITY := 240
 TARGET_SCREEN_WIDTH := 480
 TARGET_SCREEN_HEIGHT := 854
 
-# Kernel - known KY-42C prebuilts retained from the pre-merge tree.
+# Kernel - ARM64 A1 recovery prebuilts.  Recovery userspace remains ARM32.
 TARGET_FORCE_PREBUILT_KERNEL := true
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
 TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
 BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
 
 # Kernel image geometry
+#
+# Same-generation MediaTek MT6761 K64 BoardConfig keeps the common LK-visible
+# base at 0x40000000, but changes the kernel offset from the K32 0x8000 to
+# 0x80000.  That gives the AArch64 Image load address 0x40080000 and matches
+# the text_offset=0x80000 carried by the A1 Linux Image header.
 BOARD_BOOTIMG_HEADER_VERSION := 2
 BOARD_KERNEL_BASE := 0x40000000
-BOARD_KERNEL_CMDLINE := bootopt=64S3,32S1,32S1 buildvariant=eng
+BOARD_KERNEL_OFFSET := 0x00080000
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=eng
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_RAMDISK_OFFSET := 0x11b00000
 BOARD_KERNEL_TAGS_OFFSET := 0x07880000
 
+# Keep the MT6761 K64 header-v2 contract explicit.  In particular, do not
+# inherit mkbootimg's generic kernel or DTB offsets: LK consumes these physical
+# addresses from the boot image header.
 BOARD_MKBOOTIMG_ARGS += --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+BOARD_MKBOOTIMG_ARGS += --kernel_offset $(BOARD_KERNEL_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --ramdisk_offset $(BOARD_RAMDISK_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --tags_offset $(BOARD_KERNEL_TAGS_OFFSET)
 BOARD_MKBOOTIMG_ARGS += --dtb $(TARGET_PREBUILT_DTB)
+BOARD_MKBOOTIMG_ARGS += --dtb_offset $(BOARD_KERNEL_TAGS_OFFSET)
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072 # BOARD_KERNEL_PAGESIZE * 64
