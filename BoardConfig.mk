@@ -52,7 +52,9 @@ BOARD_PREBUILT_DTBOIMAGE := $(DEVICE_PATH)/prebuilt/dtbo.img
 BOARD_BOOTIMG_HEADER_VERSION := 2
 BOARD_KERNEL_BASE := 0x40000000
 BOARD_KERNEL_OFFSET := 0x00080000
-BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2 buildvariant=eng
+# The recovery build appends buildvariant=eng itself; keep only the MTK K64
+# boot contract here so the final cmdline contains the build variant once.
+BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,64N2
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_RAMDISK_OFFSET := 0x11b00000
 BOARD_KERNEL_TAGS_OFFSET := 0x07880000
