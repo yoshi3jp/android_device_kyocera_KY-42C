@@ -151,3 +151,6 @@ PRODUCT_ENFORCE_VINTF_MANIFEST := true
 TARGET_USES_LOGD := true
 TWRP_INCLUDE_LOGCAT := true
 TWRP_EVENT_LOGGING := true
+
+# ARM64 bring-up: keep recovery USB ADB-only until MTP init is restored safely.
+TW_EXCLUDE_MTP := true
