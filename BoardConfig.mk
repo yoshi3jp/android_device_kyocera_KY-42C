@@ -125,9 +125,11 @@ PLATFORM_VERSION := 10.0.0
 # Stock KY-42C uses fscrypt FBE with AES-256-XTS contents encryption.
 # Userdata is mounted directly as F2FS; there is no metadata-encryption
 # dm layer, no keydirectory=, and no wrapped-key fstab flag.
-TW_INCLUDE_CRYPTO := true
-TW_USE_FSCRYPT_POLICY := 1
-TW_PREPARE_DATA_MEDIA_EARLY := true
+# TW_INCLUDE_CRYPTO := true
+# TW_USE_FSCRYPT_POLICY := 1
+# TW_PREPARE_DATA_MEDIA_EARLY := true
+# Deliberately excluded from the initial ARM64-userspace A2 experiment.
+# Restore after native AArch64 recovery/userspace has been validated.
 
 # TWRP Configuration
 TW_THEME := portrait_mdpi
