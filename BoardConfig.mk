@@ -46,7 +46,7 @@ TARGET_SCREEN_DENSITY := 240
 TARGET_SCREEN_WIDTH := 480
 TARGET_SCREEN_HEIGHT := 854
 
-# Kernel - ARM64 A1 recovery prebuilts.  Recovery userspace remains ARM32.
+# Kernel - ARM64 A1 recovery prebuilts with native ARM64 recovery userspace.
 TARGET_FORCE_PREBUILT_KERNEL := true
 TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/kernel
 TARGET_PREBUILT_DTB := $(DEVICE_PATH)/prebuilt/dtb.img
@@ -125,9 +125,9 @@ PLATFORM_VERSION := 10.0.0
 # Stock KY-42C uses fscrypt FBE with AES-256-XTS contents encryption.
 # Userdata is mounted directly as F2FS; there is no metadata-encryption
 # dm layer, no keydirectory=, and no wrapped-key fstab flag.
-# TW_INCLUDE_CRYPTO := true
-# TW_USE_FSCRYPT_POLICY := 1
-# TW_PREPARE_DATA_MEDIA_EARLY := true
+TW_INCLUDE_CRYPTO := true
+TW_USE_FSCRYPT_POLICY := 1
+TW_PREPARE_DATA_MEDIA_EARLY := true
 # Deliberately excluded from the initial ARM64-userspace A2 experiment.
 # Restore after native AArch64 recovery/userspace has been validated.
 
